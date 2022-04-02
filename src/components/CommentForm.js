@@ -1,12 +1,11 @@
 import {useState} from "react"
 import {useHistory} from "react-router-dom"
 
-const CommentForm = () => {
+const CommentForm = ({postId, addNewComment}) => {
     const [comment, setComment] = useState({
         content: "",
         rating: "",
     });
-    const history = useHistory()
 
     const handleChange = (e) => {
         setComment({
@@ -22,10 +21,34 @@ const CommentForm = () => {
         }
 
         const newComment = {
-            title: comment.title,
-            content: comment.content,
-            // what are we missing here? 
+            rating: comment.rating,
+            content: comment.content
         }
+
+        fetch(`http://localhost:3001/posts/${postId}/comments`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(newComment)
+        })
+        .then(resp => {
+            if (resp.status === 201) {
+                resp.json()
+                .then(comment => {
+                    addNewComment(comment)
+                    setComment({content: "", rating: ""})
+
+                })
+            } else {
+                resp.json()
+                .then(errorObj => {
+                    alert(errorObj.error)
+                    setComment({content: "", rating: ""})
+                })
+            }
+        })
+        .catch(err => alert(err))
         
     }
     return (

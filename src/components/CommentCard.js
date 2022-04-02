@@ -6,7 +6,7 @@ const CommentCard = ({comment}) => {
     const [commentObj, setCommentObj] = useState(null);
     useEffect(() => {   
         if (!comment) {
-            fetch(`http://localhost:9393/comments/${id}`)
+            fetch(`http://localhost:3001/comments/${id}`)
             .then(resp => resp.json())
             .then(comment => setCommentObj(comment))
         }

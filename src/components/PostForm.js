@@ -5,7 +5,7 @@ const PostForm = () => {
     const [post, setPost] = useState({
         title: "",
         content: "",
-        mediaUrl: "",
+        mediaUrl: ""
     });
     const history = useHistory()
 
@@ -22,11 +22,14 @@ const PostForm = () => {
             alert("You must fill in all the information please!")
         }
 
-        const newPost = {
-            title: post.title,
-            content: post.content,
-            media_url: post.mediaUrl,
-        }
+       fetch("http://localhost:3001/posts", {
+           method: "POST",
+           headers: {
+               "Content-Type": "application/json"
+           },
+           body: JSON.stringify(post)
+       })
+       .then(() => history.push("/posts"))
         
     }
     return (

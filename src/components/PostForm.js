@@ -1,7 +1,7 @@
 import {useState} from "react"
 import {useHistory} from "react-router-dom"
 
-const PostForm = () => {
+const PostForm = ({handleError}) => {
     const [post, setPost] = useState({
         title: "",
         content: "",
@@ -29,8 +29,14 @@ const PostForm = () => {
            },
            body: JSON.stringify(post)
        })
-       .then(() => history.push("/posts"))
-        
+       .then((resp) => {
+           if (resp.status === 201) {
+                history.push("/posts")
+           } else {
+            resp.json().then(errorObj => handleError(errorObj.error))
+           }
+       })
+       .catch(err => handleError(err.message))
     }
     return (
         <>

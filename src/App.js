@@ -8,6 +8,7 @@ import Notification from "./components/Notification"
 import PostForm from "./components/PostForm"
 import PostsContainer from "./containers/PostsContainer"
 import {useState} from "react"
+import CommentsList from './components/CommentsList';
 
 function App() {
   const [error, setError] = useState(null);
@@ -24,8 +25,11 @@ function App() {
           <Route path="/posts/new">
             <PostForm handleError={handleError} />
           </Route>
+          <Route path="/posts/:postId/comments">
+            <CommentsList handleError={handleError} />
+          </Route>
           <Route path="/posts/:id">
-            <PostCard />
+            <PostCard handleError={handleError} />
           </Route>
           <Route path="/posts">
             <PostsContainer />
@@ -33,7 +37,6 @@ function App() {
           <Route path="/">
             <Home />
           </Route>
-
         </Switch>
       </Router>
     </div>

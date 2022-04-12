@@ -1,10 +1,11 @@
 import {useState} from "react"
 
-const EditPostForm = ({postObj, handleUpdate}) => {
+const EditPostForm = ({postObj, handleUpdate, handleError}) => {
     const [post, setPost] = useState({
         title: postObj.title,
         content: postObj.content,
-        mediaUrl: postObj.mediaUrl
+        mediaUrl: postObj.mediaUrl || "",
+        deleteTime: postObj.delete_time || ""
     });
 
     const handleChange = (e) => {
@@ -16,7 +17,7 @@ const EditPostForm = ({postObj, handleUpdate}) => {
 
     const handleSubmit = e => {
         e.preventDefault()
-        if ([post.title, post.content].some(val => val.trim() === "")) {
+        if ([post.title, post.content, post.deleteTime].some(val => val.trim() === "")) {
             alert("You must fill in all the information please!")
         }
 
@@ -25,10 +26,19 @@ const EditPostForm = ({postObj, handleUpdate}) => {
            headers: {
                "Content-Type": "application/json"
            },
-           body: JSON.stringify(post)
+           body: JSON.stringify({title: post.title, content: post.content, media_url: post.mediaUrl, delete_time: post.deleteTime})
        })
-       .then((res) => res.json())
-       .then(data => handleUpdate(data))
+       .then((resp) => {
+            if (resp.status === 201) {
+                resp.json()
+                .then(data => handleUpdate(data))
+            } else {
+                resp.json()
+                .then(errorObj => handleError(errorObj.error))
+            }
+        })
+        .catch(err => handleError(err.message))
+       
         
     }
     return (
@@ -41,6 +51,8 @@ const EditPostForm = ({postObj, handleUpdate}) => {
                 <input onChange={handleChange} type="text" name="content" value={post.content} required/><br />
                 <label htmlFor="mediaUrl">Media Url</label>
                 <input onChange={handleChange} type="text" name="mediaUrl" value={post.mediaUrl}/><br />
+                <label htmlFor="deleteTime">Delete DateTime</label>
+                <input onChange={handleChange} type="datetime-local" name="deleteTime" value={post.deleteTime.toString().substring(0, 16)} required/><br />
                 <input type="submit" value="Update Post" />
             </form>
         </>

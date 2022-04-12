@@ -5,7 +5,8 @@ const PostForm = ({handleError}) => {
     const [post, setPost] = useState({
         title: "",
         content: "",
-        mediaUrl: ""
+        mediaUrl: "",
+        deleteTime: ""
     });
     const history = useHistory()
 
@@ -18,7 +19,7 @@ const PostForm = ({handleError}) => {
 
     const handleSubmit = e => {
         e.preventDefault()
-        if ([post.title, post.content, post.mediaUrl].some(val => val.trim() === "")) {
+        if ([post.title, post.content, post.mediaUrl, post.deleteTime].some(val => val.trim() === "")) {
             alert("You must fill in all the information please!")
         }
 
@@ -27,12 +28,13 @@ const PostForm = ({handleError}) => {
            headers: {
                "Content-Type": "application/json"
            },
-           body: JSON.stringify(post)
+           body: JSON.stringify({title: post.title, content: post.content, media_url: post.mediaUrl, delete_time: post.deleteTime})
        })
        .then((resp) => {
            if (resp.status === 201) {
                 history.push("/posts")
            } else {
+               debugger
             resp.json().then(errorObj => handleError(errorObj.error))
            }
        })
@@ -48,6 +50,8 @@ const PostForm = ({handleError}) => {
                 <input onChange={handleChange} type="text" name="content" value={post.content} required/><br />
                 <label htmlFor="mediaUrl">Media Url</label>
                 <input onChange={handleChange} type="text" name="mediaUrl" value={post.mediaUrl} required/><br />
+                <label htmlFor="deleteTime">Delete DateTime</label>
+                <input onChange={handleChange} type="datetime-local" name="deleteTime" value={post.deleteTime} required/><br />
                 <input type="submit" value="Create Post" />
             </form>
         </>

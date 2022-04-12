@@ -20,17 +20,17 @@ const CommentForm = ({postId, addNewComment}) => {
             alert("You must fill in all the information please!")
         }
 
-        const newComment = {
-            rating: comment.rating,
-            content: comment.content
-        }
+        // const newComment = {
+        //     rating: comment.rating,
+        //     content: comment.content
+        // }
 
         fetch(`http://localhost:3001/posts/${postId}/comments`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(newComment)
+            body: JSON.stringify(comment)
         })
         .then(resp => {
             if (resp.status === 201) {

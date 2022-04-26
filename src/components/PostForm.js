@@ -1,7 +1,7 @@
-import {useState} from "react"
+import {useState, useEffect} from "react"
 import {useHistory} from "react-router-dom"
 
-const PostForm = ({handleError}) => {
+const PostForm = ({handleError, name, age}) => {
     const [post, setPost] = useState({
         title: "",
         content: "",
@@ -9,6 +9,13 @@ const PostForm = ({handleError}) => {
         deleteTime: ""
     });
     const history = useHistory()
+    
+    useEffect(() => {
+        fetch("http://localhost:3001/api/v1/test-cookies")
+        .then(res => res.json())
+        .then(data => console.log(data))
+        .catch(err => alert(err))
+    }, []);
 
     const handleChange = (e) => {
         setPost({

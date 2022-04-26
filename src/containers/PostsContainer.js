@@ -4,9 +4,21 @@ const PostsContainer = () => {
     const [posts, setPosts] = useState([]);
 
     useEffect(() => {
-        fetch("http://localhost:3001/posts")
-        .then(r => r.json())
-        .then(data => setPosts(data))
+        fetch("/api/v1/posts")
+        .then(r => {
+          if (r.ok) {
+            r.json()
+            .then(data => {
+              const formattedPosts = data.data.map(post => {
+                return {...post.attributes, comments: post.attributes.comments.data.map(c => c.attributes)}
+              })
+              setPosts(formattedPosts)
+            })
+          } else {
+            r.json()
+            .then(errorObj => alert(errorObj.error))
+          }
+        })
         .catch(err => alert(err))  
     }, []);
 

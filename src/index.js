@@ -3,10 +3,15 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
+import { UserProvider } from './context/user';
+import { MessageProvider } from './context/message';
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <MessageProvider>
+      <UserProvider>
+        <App />
+      </UserProvider>
+    </MessageProvider>  
   </React.StrictMode>,
   document.getElementById('root')
 );

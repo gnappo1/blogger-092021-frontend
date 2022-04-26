@@ -7,32 +7,49 @@ import PostCard from "./components/PostCard"
 import Notification from "./components/Notification"
 import PostForm from "./components/PostForm"
 import PostsContainer from "./containers/PostsContainer"
-import {useState} from "react"
+import {useEffect, useContext} from "react"
 import CommentsList from './components/CommentsList';
+import Login from './components/Login';
+import Signup from './components/Signup';
+import Profile from './components/Profile';
+import {UserContext} from "./context/user"
 
 function App() {
-  const [error, setError] = useState(null);
+  const {getCurrentUser, user} = useContext(UserContext);
 
-  const handleError = (errorMsg) => setError(errorMsg)
+  useEffect(() => {
+    if (!user) {
+      getCurrentUser()
+    }
+  }, [user, getCurrentUser]);
 
   return (
     <div className="App">
       <Router>
-        <Notification error={error}/>
+        <Notification />
         <Navbar />
         <Header slogan="Start typing away!" storename="The world's finest blog!"/>
         <Switch>
           <Route path="/posts/new">
-            <PostForm handleError={handleError} />
+            <PostForm />
           </Route>
           <Route path="/posts/:postId/comments">
-            <CommentsList handleError={handleError} />
+            <CommentsList />
           </Route>
           <Route path="/posts/:id">
-            <PostCard handleError={handleError} />
+            <PostCard />
           </Route>
           <Route path="/posts">
             <PostsContainer />
+          </Route>
+          <Route path="/login">
+            <Login />
+          </Route>
+          <Route path="/signup">
+            <Signup />
+          </Route>
+          <Route path="/profile">
+            <Profile />
           </Route>
           <Route path="/">
             <Home />

@@ -1,4 +1,7 @@
 import {NavLink} from 'react-router-dom'
+import {UserContext} from "../context/user"
+import {useContext} from "react"
+
 const style = {
     width: "60%",
     margin: "5% 0 1%",
@@ -11,6 +14,8 @@ const style = {
 }
 
 const Navbar = () => {
+    const {user} = useContext(UserContext)
+
     return (
         <div>
             <NavLink
@@ -31,15 +36,58 @@ const Navbar = () => {
                 style={style}
                 to="/posts"
             >Posts</NavLink>
-            <NavLink
-            activeStyle={{
-                fontWeight: "bolder",
-                color: "red"
-            }}
-                exact
-                style={style}
-                to="/posts/new"
-            >New Post</NavLink>
+            {user ? (
+                <>
+                    <NavLink
+                    activeStyle={{
+                        fontWeight: "bolder",
+                        color: "red"
+                    }}
+                        exact
+                        style={style}
+                        to="/posts/new"
+                    >New Post</NavLink>
+                    <NavLink
+                    activeStyle={{
+                        fontWeight: "bolder",
+                        color: "red"
+                    }}
+                        exact
+                        style={style}
+                        to="/profile"
+                    >Profile</NavLink>
+                    <NavLink
+                    activeStyle={{
+                        fontWeight: "bolder",
+                        color: "red"
+                    }}
+                        exact
+                        style={style}
+                        to="/signout"
+                    >Sign Out</NavLink>
+                </>
+                ) : (
+                    <>
+                        <NavLink
+                        activeStyle={{
+                            fontWeight: "bolder",
+                            color: "red"
+                        }}
+                            exact
+                            style={style}
+                            to="/signin"
+                        >Sign In</NavLink>
+                        <NavLink
+                        activeStyle={{
+                            fontWeight: "bolder",
+                            color: "red"
+                        }}
+                            exact
+                            style={style}
+                            to="/signup"
+                        >Sign Up</NavLink>
+                    </>
+                )}
         </div>
     )
 }

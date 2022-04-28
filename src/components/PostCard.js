@@ -15,7 +15,7 @@ const PostCard = ({post, handleError}) => {
 
     useEffect(() => {   
         if (!post) {
-            fetch(`http://localhost:3001/posts/${id}`)
+            fetch(`/api/v1/posts/${id}`)
             .then(resp => resp.json())
             .then(post => {
               setPostObj(post)

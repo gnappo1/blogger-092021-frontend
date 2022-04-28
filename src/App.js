@@ -19,10 +19,8 @@ function App() {
   const {getCurrentUser, user} = useContext(UserContext)
 
   useEffect(() => {
-    if (!user) {
       getCurrentUser()
-    }
-  }, [user])
+  }, [])
 
   return (
     <div className="App">
@@ -49,12 +47,12 @@ function App() {
           <Route path="/profile">
             <Profile />
           </Route>
-          {/* <Route path="/signup">
+          <Route path="/signup">
             <Signup />
           </Route>
           <Route path="/signout">
             <Signout />
-          </Route> */}
+          </Route>
           <Route path="/">
             <Home />
           </Route>

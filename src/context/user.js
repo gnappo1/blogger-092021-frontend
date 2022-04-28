@@ -7,15 +7,14 @@ const UserContext = React.createContext()
 
 function UserProvider({children}) {
     const [user, setUser] = useState(null);
-    const history = useHistory();
     const {setMessage} = useContext(MessageContext)
 
     const getCurrentUser = useCallback(async () => { 
         try {
             const resp = await fetch("/api/v1/me")
              if (resp.status === 200) {
-                    const data = await resp.json()
-                    setUser({...data.data.attributes, posts: data.data.relationships.posts.data})
+                const data = await resp.json()
+                setUser({...data.data.attributes, posts: data.data.relationships.posts.data})
              } else {
                 const errorObj = await resp.json()
                 setMessage(errorObj.error)
@@ -27,7 +26,6 @@ function UserProvider({children}) {
 
     const login = async (userInfo) => {
         try {
-            debugger
             const resp = await fetch("/api/v1/login", {
                 method: "POST",
                 headers: {
@@ -62,9 +60,7 @@ function UserProvider({children}) {
             })
             if (resp.status === 201) {
                 const data = await resp.json()
-                debugger
-                setUser(data)
-                history.push("/profile")
+                setUser({...data.data.attributes, posts: data.data.relationships.posts.data})
             } else {
                 debugger
                 const errorObj = await resp.json()
@@ -80,11 +76,12 @@ function UserProvider({children}) {
             const resp = await fetch("/api/v1/logout", {
                 method: "DELETE"
             })
-            debugger
+            setMessage("You have been logged out")
             setUser(null)
-            history.push("/login")
+            return true
         } catch(e) {
             setMessage(e.message)
+            return false
         }
     }
 

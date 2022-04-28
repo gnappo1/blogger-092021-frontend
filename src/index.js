@@ -7,13 +7,13 @@ import {UserProvider} from './context/user';
 import {MessageProvider} from './context/message';
 
 ReactDOM.render(
-  <React.StrictMode>
+  // <React.StrictMode>
       <MessageProvider>
         <UserProvider>
             <App />
         </UserProvider>
-      </MessageProvider>
-  </React.StrictMode>,
+      </MessageProvider>,
+  // </React.StrictMode>,
   document.getElementById('root')
 );
 

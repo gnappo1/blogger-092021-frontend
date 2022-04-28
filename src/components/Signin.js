@@ -27,8 +27,6 @@ const Signin = () => {
             setMessage("You must fill in all the information please!")
         }
         login(userObj)
-        
-        
     }
     return (
         <>

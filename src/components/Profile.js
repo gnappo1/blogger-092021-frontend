@@ -5,7 +5,7 @@ import {Redirect} from 'react-router-dom'
 const Profile = () => {
     const {user} = useContext(UserContext)
     
-    if (!user) return <Redirect to="/login" />
+    if (!user) return <Redirect to="/signin" />
     
     return (
         <div>

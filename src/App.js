@@ -16,7 +16,7 @@ import Signout from './components/Signout';
 import Profile from './components/Profile';
 
 function App() {
-  const {getCurrentUser, user} = useContext(UserContext)
+  const {getCurrentUser} = useContext(UserContext)
 
   useEffect(() => {
       getCurrentUser()

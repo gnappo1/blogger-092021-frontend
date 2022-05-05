@@ -24,7 +24,7 @@ const Signin = () => {
     const handleSubmit = e => {
         e.preventDefault()
         if ([userObj.email, userObj.password].some(val => val.trim() === "")) {
-            setMessage("You must fill in all the information please!")
+            setMessage({message: "You must fill in all the information please!", color: "red"})
         }
         login(userObj)
     }

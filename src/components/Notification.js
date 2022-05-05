@@ -1,13 +1,9 @@
 import {useState, useEffect, useContext} from 'react'
 import {MessageContext} from '../context/message'
-const style = {
-    backgroundColor: "red",
-    fontSize: "bold"
-}
 
 const Notification = () => {
     const [vanishMode, setVanishMode] = useState(false);
-    const {message, setMessage} = useContext(MessageContext)
+    const {message} = useContext(MessageContext)
     
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -21,7 +17,7 @@ const Notification = () => {
 
     return (
         <div>
-            {!vanishMode ? <p style={style}>{message}</p> : null}
+            {!vanishMode ? <p style={{fontSize: "bold", backgroundColor: message?.color}}>{message?.message}</p> : null}
         </div>
     )
 }

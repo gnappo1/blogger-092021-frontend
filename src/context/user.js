@@ -17,10 +17,10 @@ function UserProvider({children}) {
                 setUser({...data.data.attributes, posts: data.data.relationships.posts.data})
              } else {
                 const errorObj = await resp.json()
-                setMessage(errorObj.error)
+                setMessage({message: errorObj.error, color: "red"})
              }
         } catch (e) {
-            setMessage(e.message)
+            setMessage({message: e.message, color: "red"})
         }
     }, [setMessage])
 
@@ -40,12 +40,12 @@ function UserProvider({children}) {
                 return true
             } else {
                 const errorObj = await resp.json()
-                setMessage(errorObj.error)
+                setMessage({message: errorObj.error, color: "red"})
                 return false
             }
 
         } catch(e) {
-            setMessage(e.message)
+            setMessage({message: e.message, color: "red"})
         }
     }
     const signup = async (userInfo) => {
@@ -62,13 +62,12 @@ function UserProvider({children}) {
                 const data = await resp.json()
                 setUser({...data.data.attributes, posts: data.data.relationships.posts.data})
             } else {
-                debugger
                 const errorObj = await resp.json()
-                setMessage(errorObj.error)
+                setMessage({message: errorObj.error, color: "red"})
             }
 
         } catch(e) {
-            setMessage(e.message)
+            setMessage({message: e.message, color: "red"})
         }
     }
     const signout = async () => { 
@@ -76,11 +75,11 @@ function UserProvider({children}) {
             const resp = await fetch("/api/v1/logout", {
                 method: "DELETE"
             })
-            setMessage("You have been logged out")
+            setMessage({messge: "You have been logged out", color: "green"})
             setUser(null)
             return true
         } catch(e) {
-            setMessage(e.message)
+            setMessage({message: e.message, color: "red"})
             return false
         }
     }

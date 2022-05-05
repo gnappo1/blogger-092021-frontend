@@ -13,9 +13,10 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {UserContext} from '../context/user'
+import {MessageContext} from '../context/message'
 import {useContext, useState} from 'react'
 import {useHistory, Redirect} from 'react-router-dom'
-import {GoogleAPI, GoogleLogin, GoogleLogout} from 'react-google-oauth';
+import {GoogleLogin} from 'react-google-login';
 import Cookies from 'universal-cookie';
 
 function Copyright(props) {
@@ -34,13 +35,13 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignIn() {
-    const {login, user} = useContext(UserContext);
+    const {login, user, setUser} = useContext(UserContext);
+    const {setMessage} = useContext(MessageContext);
     const history = useHistory()
     const [userObj, setUserObj] = useState({
         email: "",
         password: ""
     });
-    const cookies = new Cookies();
     const handleChange = ({target: {name, value}}) => {
         setUserObj({
             ...userObj,
@@ -57,8 +58,6 @@ export default function SignIn() {
     };
 
     const responseGoogle = (response) => {
-        debugger
-        var token = response.Zi;
         const requestOptions = {
             method: 'POST',
             headers: {
@@ -66,20 +65,23 @@ export default function SignIn() {
                 'Content-Type': 'application/json',
                 // 'access_token': `${response.Zi.accessToken}`
             },
-            body: JSON.stringify(token)
+            body: JSON.stringify(response)
         }
-        debugger
         fetch(`/api/v1/auth/google_oauth2/callback`, requestOptions)
-        .then(response => {
-            debugger
-                // cookies.set('accesstoken', response.headers.get('access-token'), {
-                //     expires: 7
-                // });
-                // cookies.set('client',response.headers.get('client'), {expires: 7});
-                // cookies.set('tokentype',response.headers.get('token-type'), {expires: 7});
-                // cookies.set('expiry',response.headers.get('expiry'), {expires: 7});
-                // cookies.set('uid', response.headers.get('uid'),{expires: 7});
+        .then(res => {
+          if (res.ok) {
+            res.json().then(data => {
+              setUser({...data.data.attributes, posts: data.data.relationships.posts.data})
+              setMessage({message: "User successfully logged in", color: "green"})
+            })
+          }
+          else {
+            res.json().then(data => {
+              setMessage({message: data.error, color: "red"})
+            })
+          }
         })
+        .catch(err => setMessage({message: err.message, color: "red"}))
       }
 
     if (user) return <Redirect to="/profile" />
@@ -139,11 +141,9 @@ export default function SignIn() {
             >
               Sign In
             </Button>
-            <GoogleAPI className="GoogleLogin" clientId="82389295899-o8donpbsk9tqeafbkua37fk9o3f1qd6l.apps.googleusercontent.com">
-                <div>
-                    <GoogleLogin height="10" width="500px" backgroundColor="#4285f4" access="offline" scope="email profile" onLoginSuccess={responseGoogle} onFailure={responseGoogle}/>
-                </div>
-            </GoogleAPI>
+            <div>
+                <GoogleLogin height="10" width="500px" backgroundColor="#4285f4" clientId="82389295899-o8donpbsk9tqeafbkua37fk9o3f1qd6l.apps.googleusercontent.com" access="offline" scope="email profile" onSuccess={responseGoogle} onFailure={responseGoogle}/>
+            </div>
             <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">

@@ -55,11 +55,11 @@ const Signup = () => {
     const handleSubmit = e => {
         e.preventDefault()
         if ([userObj.email, userObj.password, userObj.passwordConfirmation, userObj.username].some(val => val.trim() === "")) {
-            setMessage("You must fill in all the information please!")
+            setMessage({message: "You must fill in all the information please!", color: "red"})
         }
         const didItWork = signup({...userObj, password_confirmation: userObj.passwordConfirmation})
         if (didItWork) {
-            setMessage("User successfully created!")
+            setMessage({message: "User successfully created!", color: "green"})
             history.push("/profile")
         }
         
